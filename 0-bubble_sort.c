@@ -1,5 +1,4 @@
 #include "sort.h"
-#include <stdio.h>
 
 /**
  * swap - swaps values in two memory locations.
@@ -31,9 +30,6 @@ void bubble_sort(int *array, size_t size)
 	unsigned int i, n, new_n;
 
 	n = size;
-
-	if (size < 2)
-		print_array(array, size);
 	while (n > 1)
 	{
 		new_n = 0;
