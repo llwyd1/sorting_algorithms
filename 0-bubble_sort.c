@@ -18,7 +18,8 @@ void swap(int *a, int *b)
 }
 
 /**
- * bubble_sort - sorts a given array using the bubble sort technique.
+ * bubble_sort - sorts a given array in ascending order using the
+ *  bubble sort technique.
  *
  * @array: the array to be sorted.
  * @size: the size of the array.
