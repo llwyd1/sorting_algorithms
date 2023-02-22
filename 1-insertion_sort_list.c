@@ -1,84 +1,92 @@
 #include "sort.h"
 
-void swap_nodes(listint_t *a, listint_t *b, listint_t *list)
+/**
+* swap_nodes - Swaps two nodes in a doubly linked list
+* @a: Pointer to the first node
+* @b: Pointer to the second node
+* @head: Pointer to the head of the linked list
+* Return: void
+*/
+void swap_nodes(listint_t **a, listint_t **b, listint_t **head)
 {
 	listint_t *temp;
-	if (!a || !b)
+
+	if (!*a || !*b)
 	{
-		print_list(list);
 		return;
 	}
 
-	if (a == b)
+	if ((*a) == (*b))
 	{
-		print_list(list);
-		return;
-	}
-	if (a->prev == b)
-	{
-		swap_nodes(b, a, list);
-		print_list(list);
 		return;
 	}
 
-	 temp = a->prev;
-	a->prev = b->prev;
-	b->prev = temp;
-	temp = a->next;
-	a->next = b->next;
-	b->next = temp;
+	if ((*a)->prev == (*b))
+	{
+		swap_nodes(b, a, head);
+		print_list(*head);
+		return;
+	}
 
-	if (a->prev != NULL)
-		a->prev->next = a;
-	if (a->next != NULL)
-		a->next->prev = a;
-	if(b->prev != NULL)
-		b->prev->next = b;
-	if (b->next != NULL)
-		b->next->prev = b;
+	temp = (*a)->prev;
+	(*a)->prev = (*b)->prev;
+	(*b)->prev = temp;
+	temp = (*a)->next;
+	(*a)->next = (*b)->next;
+	(*b)->next = temp;
 
-	print_list(list);
+	if ((*a)->prev != NULL)
+		(*a)->prev->next = (*a);
+	if ((*a)->next != NULL)
+		(*a)->next->prev = (*a);
+	if ((*b)->prev != NULL)
+		(*b)->prev->next = (*b);
+	if ((*b)->next != NULL)
+		(*b)->next->prev = (*b);
+
+	if (*a == *head)
+		*head = *b;
+	else if (*b == *head)
+		*head = *a;
 }
 
-/*
+/**
  * insertion_sort_list - sorts a doubly linked list of integers
  * in ascending order using the insertion sort
  * @list: is a pointer to the head of the doubly linked list
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *head = *list;
-	listint_t *i = head->next;
-	listint_t *temp;
-	listint_t *j;
+	listint_t *current;
 
-	while (i)
+	if (*list == NULL || (*list)->next == NULL)
+		return;
+
+	current = (*list)->next;
+	while (current != NULL)
 	{
-		int x = i->n;
-		j = i->prev;
-	
-		while (j && j->n > x)
+		listint_t *temp = current;
+
+		while (temp->prev != NULL && temp->n < temp->prev->n)
 		{
-			if (j == i->next)
-			{
-				temp = j;
-				temp->next = i->next;
-			}
-			j = j->prev;
-		}
-		/*
-		if (!j)
-		{
-			i->next = head;
-			i->prev = NULL;
+			listint_t *prev = temp->prev;
+			listint_t *next = temp->next;
+
+			if (prev->prev != NULL)
+				prev->prev->next = temp;
+			else
+				*list = temp;
+			temp->prev = prev->prev;
+			prev->next = next;
+			if (next != NULL)
+				next->prev = prev;
+
+			prev->prev = temp;
+			temp->next = prev;
+
+			prev = temp->prev;
 			print_list(*list);
 		}
-		i->next = j->next;
-		i->prev = j;
-		print_list(*list);
-		*/
-		swap_nodes(i, j, *list);
-		i = i->next;
-	
+		current = current->next;
 	}
 }
